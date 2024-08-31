@@ -1,0 +1,53 @@
+﻿@page
+@model WebApplication___Sam_Auto.Pages.LogInModel
+@{
+    ViewData["Title"] = "LogIn";
+}
+
+<form method="post" class="layoutMiddleLayerLogIn" novalidate>
+    <div class="headingHolder">
+        <h2>Log In</h2>
+    </div>
+    <div class="formHolder">
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="error-message">
+                <span class="text-danger">@TempData["ErrorMessage"]</span>
+            </div>
+        }
+        <div>
+            <h2 class="email name">Email:</h2>
+            <span asp-validation-for="LogInDTO.Email" class="text-danger"></span>
+            <input asp-for="LogInDTO.Email" class="input" type="text" placeholder="Input email" />
+        </div>
+        <div>
+            <h2 class="name">Password:</h2>
+            <span asp-validation-for="LogInDTO.Password" class="text-danger"></span>
+            <input asp-for="LogInDTO.Password" class="input" type="password" placeholder="Input password" />
+        </div>
+        <ul class="ForgotPasswordPanel">
+            <li><a asp-area="" asp-page="/ForgotPassword">Forgot password?</a></li>
+        </ul>
+        <div class="buttonHolder">
+            <button class="submitBtn">Log In</button>
+        </div>
+        <div class="NotAMemberPanel">
+            <h5>Don't have an account?</h5>
+            <ul class="NavToSignUp">
+                <li><a asp-area="" asp-page="/SignUp">Sign Up</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="image">
+        <img class="imgShadow" src="~/images/SamAutoLogo.png">
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/CustomLogIn.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" asp-append-version="true" />
+}

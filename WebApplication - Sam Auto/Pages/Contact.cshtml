@@ -1,0 +1,25 @@
+﻿@page
+@model WebApplication___Sam_Auto.Pages.ContactModel
+@{
+    ViewData["Title"] = "Contact";
+}
+
+<div
+    class="layoutMiddleLayerHomePage">
+      <div class="titleHolder">
+        <h2>About us</h2>
+      </div>
+      <div class="textHolder">
+        <p>
+          Established in 2004 by Samuil Kozarov, Sam Auto is a renowned car dealership located in Sofia, Bulgaria. With over a decade of expertise, our dedicated team has garnered a loyal clientele, many of whom have evolved into valued customers. At Sam Auto, we specialize in high-end vehicle sales, offering a wide range of premium vehicles to meet the diverse needs of our customers. Our approach to business is characterized by professionalism, flexibility, and a commitment to customer satisfaction. We strive to make every transaction seamless and enjoyable, ensuring that each client receives personalized attention and expert guidance throughout the buying process. Trust Sam Auto for your next vehicle purchase and experience unparalleled service and quality.
+      </div>
+      <div class="imageHolder">
+        <img class = "imgShadow" src="~/images/SamAutoLogo.png">
+      </div>
+</div> 
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/CustomContact.css" asp-append-version="true" />
+}

@@ -1,0 +1,113 @@
+﻿@page
+@model WebApplication___Sam_Auto.Pages.UserProfileModel
+@{
+    ViewData["Title"] = "UserProfile";
+}
+
+<div class="logOut">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#savingModalCenter">
+        Log out
+    </button>
+    <div class="modal fade" id="savingModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Log out</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5>
+                        Are you sure you want to log out?
+                    </h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <form method="post" asp-page-handler="LogOut">
+                        <button class="logOutBtn" type="submit">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form method="post" asp-page-handler="Update" class="layoutMiddleLayerSignUp" novalidate>
+    <div class="headingHolder">
+        <h2>My Profile</h2>
+    </div>
+    <div class="formHolder">
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="error-message">
+                <span class="text-danger">@TempData["ErrorMessage"]</span>
+            </div>
+        }
+        <div>
+            <h2 class="name">First Name:</h2>
+            <span asp-validation-for="AccountUpdateDTO.FirstName" class="text-danger"></span>
+            <input asp-for="AccountUpdateDTO.FirstName" class="input" type="text" placeholder="Input your first name" />
+        </div>
+        <div>
+            <h2 class="name">Last Name:</h2>
+            <span asp-validation-for="AccountUpdateDTO.LastName" class="text-danger"></span>
+            <input asp-for="AccountUpdateDTO.LastName" class="input" type="text" placeholder="Input last name" />
+        </div>
+        <div>
+            <h2 class="name">Email:</h2>
+            <span asp-validation-for="AccountUpdateDTO.Email" class="text-danger"></span>
+            <input asp-for="AccountUpdateDTO.Email" class="input" type="text" placeholder="Input email" />
+        </div>
+        <div>
+            <h2 class="name">Phone:</h2>
+            <span asp-validation-for="AccountUpdateDTO.PhoneNumber" class="text-danger"></span>
+            <input asp-for="AccountUpdateDTO.PhoneNumber" class="input" type="tel" placeholder="Input Phone" />
+        </div>
+        <div>
+            <h2 class="name">Secret Question:</h2>
+            <span asp-validation-for="AccountUpdateDTO.SecretQuestion" class="text-danger"></span>
+            <select asp-for="AccountUpdateDTO.SecretQuestion" class="input" placeholder="Select a secret question">
+                <option value="">Select a secret question</option>
+                @foreach (var question in Model.GetSecretQuestions())
+                {
+                    <option value="@question">@question</option>
+                }
+            </select>
+        </div>
+        <div>
+            <h2 class="name">Answer to secret question:</h2>
+            <span asp-validation-for="AccountUpdateDTO.SecretQuestionAnswer" class="text-danger"></span>
+            <input asp-for="AccountUpdateDTO.SecretQuestionAnswer" class="input" type="text" placeholder="Input answer" />
+        </div>
+        <div>
+            <h2 class="name">Password:</h2>
+            <span asp-validation-for="AccountUpdateDTO.Password" class="text-danger"></span>
+            <input asp-for="AccountUpdateDTO.Password" class="input" type="password" placeholder="Input password" />
+        </div>
+        <div>
+            <h2 class="name">Confirm Password:</h2>
+            <span asp-validation-for="AccountUpdateDTO.ConfirmPassword" class="text-danger"></span>
+            <input asp-for="AccountUpdateDTO.ConfirmPassword" class="input" type="password" placeholder="Confirm password" />
+        </div>
+        <div class="buttonHolder">
+            <button type="submit" class="submitBtn">Save changes</button>
+        </div>
+    </div>
+    <div class="image">
+        <img class="imgShadow" src="~/images/SamAutoLogo.png" alt="SamAuto Logo" />
+    </div>
+</form>
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/CustomSignUp.css" asp-append-version="true" />
+}
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+
+    <script src="~/js/CustomRating.js"></script>
+}

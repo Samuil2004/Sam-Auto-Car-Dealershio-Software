@@ -1,0 +1,195 @@
+﻿@page
+@using Classes;
+@model WebApplication___Sam_Auto.Pages.CarViewModel
+@{
+    ViewData["Title"] = "CarView";
+}
+
+<div class="layoutMiddleLayerAllVehicles">
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="error-message">
+            <span class="text-danger">@TempData["ErrorMessage"]</span>
+        </div>
+    }
+    else{
+        <div class="contentHolder">
+            <div class="car">
+                <div class="topLayer">
+                    <h4 class="releaseDate">@Model.GetSelectedVehicle().GetPublicationDate.ToString("dd/MM/yyyy")</h4>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @if (!Model.GetSelectedVehicle().GetIsReserved)
+                        {
+                            @if (!Model.IsVehicleAlreadyBookmarked(@Model.GetSelectedVehicle()))
+                            {
+                                <form method="post" asp-page-handler="BookmarkVehicle">
+                                    <input type="hidden" name="vehicleId" value="@Model.GetSelectedVehicle().GetVehicleId" />
+                                    <button type="submit" class="bookmarkHeart">Bookmark</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form method="post" asp-page-handler="UnBookmarkVehicle">
+                                    <input type="hidden" name="vehicleId" value="@Model.GetSelectedVehicle().GetVehicleId" />
+                                    <button type="submit" class="bookmarkHeart">Unbookmark</button>
+                                </form>
+                            }
+                        }
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ratingModalCenter">
+                            Rate
+                        </button>
+                        <div class="modal fade" id="ratingModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Rate @Model.GetSelectedVehicle().GetBrand - @Model.GetSelectedVehicle().GetModel</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form method="post" asp-page-handler="Rate">
+                                        <div class="modal-body ratePanel">
+                                            <input type="hidden" id="vehicleId" name="vehicleId" value="@Model.GetSelectedVehicle().GetVehicleId" />
+                                            <button type="submit" name="rating" value="1" class="rateBtn"><img class="image" src="~/images/EmptyStar.png" /></button>
+                                            <button type="submit" name="rating" value="2" class="rateBtn"><img class="image" src="~/images/EmptyStar.png" /></button>
+                                            <button type="submit" name="rating" value="3" class="rateBtn"><img class="image" src="~/images/EmptyStar.png" /></button>
+                                            <button type="submit" name="rating" value="4" class="rateBtn"><img class="image" src="~/images/EmptyStar.png" /></button>
+                                            <button type="submit" name="rating" value="5" class="rateBtn"><img class="image" src="~/images/EmptyStar.png" /></button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="leftLayer">
+                    @if (Model.IsImageUrlAccessible(@Model.GetSelectedVehicle().GetImage))
+                    {
+                        <img class="carImage" src="@Model.GetSelectedVehicle().GetImage" />
+                    }
+                    else
+                    {
+                        <img class="carImage" src="~/images/DefaultErrorImage.png" />
+                    }
+                </div>
+                <div class="rightLayer">
+                    <div class="header">
+                        <h3 class="brandModel">@Model.GetSelectedVehicle().GetBrand - @Model.GetSelectedVehicle().GetModel</h3>
+                        <h3 class="price">@Model.GetSelectedVehicle().GetPrice.ToString("#,##0.00")€</h3>
+                    </div>
+                    <div class="characteristicsCategory">
+                        <div><h4>Type</h4></div>
+                        <div><h4>Date of prodution</h4></div>
+                        <div><h4>Rating</h4></div>
+                        <div><h4>Color</h4></div>
+                        <div><h4>Engine</h4></div>
+                        @if (@Model.GetSelectedVehicle() is Car car || @Model.GetSelectedVehicle() is Truck truck)
+                        {
+                            <div><h4>Engine Power</h4></div>
+                        }
+                        else
+                        {
+                            <div><h4>Cubic Capacity</h4></div>
+                        }
+                        <div><h4>Fuel</h4></div>
+                        <div><h4>Transmission</h4></div>
+                        <div><h4>Mileage</h4></div>
+                        <div><h4>Condition</h4></div>
+                        @if (@Model.GetSelectedVehicle() is Car car11 || @Model.GetSelectedVehicle() is Truck truck11)
+                        {
+                            <div><h4>Steering Wheel</h4></div>
+                        }
+                        else
+                        {
+                            <div><h4>Wind Shield</h4></div>
+
+                        }
+                    </div>
+                    <div class="characteristicsVehicle">
+                        <div><h4>@Model.GetSelectedVehicle().GetBodyType</h4></div>
+                        <div>
+                            <h4>@Model.GetSelectedVehicle().GetYearOfProduction.ToString("dd/MM/yyyy")</h4>
+                        </div>
+                        <div><h4>⭐@Model.GetSelectedVehicle().GetAverageRating/5</h4></div>
+                        <div><h4>@Model.GetSelectedVehicle().GetColor</h4></div>
+                        <div><h4>@Model.GetSelectedVehicle().GetEngine.GetEngineType</h4></div>
+                        @if (@Model.GetSelectedVehicle() is Car car1)
+                        {
+                            <div><h4>@car1.GetHorsePower</h4></div>
+                        }
+                        else if (@Model.GetSelectedVehicle() is Truck truck1)
+                        {
+                            <div><h4>@truck1.GetHorsePower</h4></div>
+                        }
+                        else if (@Model.GetSelectedVehicle() is Motorcycle motorcycle1)
+                        {
+                            <div><h4>@motorcycle1.GetCubicCapacity</h4></div>
+                        }
+                        <div><h4>@Model.GetSelectedVehicle().GetEngine.GetFuelType</h4></div>
+                        <div><h4>@Model.GetSelectedVehicle().GetTransmissionType.ToString()</h4></div>
+                        <div><h4>@Model.GetSelectedVehicle().GetMileage</h4></div>
+                        <div><h4>@Model.GetSelectedVehicle().GetCondition.ToString()</h4></div>
+                        @if (@Model.GetSelectedVehicle() is Car car2)
+                        {
+                            <div><h4>@car2.GetSteeringWheel</h4></div>
+                        }
+                        else if (@Model.GetSelectedVehicle() is Truck truck2)
+                        {
+                            <div><h4>@truck2.GetSteeeringWheelType</h4></div>
+                        }
+                        else if (@Model.GetSelectedVehicle() is Motorcycle motorcycle2)
+                        {
+                            <div><h4>@motorcycle2.GetHasWindShield.ToString()</h4></div>
+                        }
+                    </div>
+                    <div class="carFooter">
+                        @if (User.Identity.IsAuthenticated && !@Model.GetSelectedVehicle().GetIsReserved)
+                        {
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#savingModalCenter">
+                                Save for buying
+                            </button>
+                            <div class="modal fade" id="savingModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Save @Model.GetSelectedVehicle().GetBrand - @Model.GetSelectedVehicle().GetModel for buying</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h5>Selected vehicle will be saved for 3 days (untill @Model.GetSavingDeadline()).
+                                                For more information please contact us!
+                                            </h5>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                            <form method="post" asp-page-handler="SaveVehicleForBuying">
+                                                <input type="hidden" name="vehicleId" value="@Model.GetSelectedVehicle().GetVehicleId" />
+                                                <button type="submit" class="btn btn-primary">Save</button>
+                                            </form>
+                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/CustomRating.js"></script>
+}
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/CustomCarView.css" asp-append-version="true" />
+}

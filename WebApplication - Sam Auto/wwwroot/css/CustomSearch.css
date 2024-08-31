@@ -1,0 +1,98 @@
+﻿/* Card styling */
+.card {
+    max-width: 800px;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+/* Form styling */
+.form-group label {
+    font-weight: bold;
+}
+
+.input-group .input-group-text img {
+    width: 20px;
+    height: auto;
+}
+
+.btn-primary {
+    background-color: #337ab7;
+    border-color: #337ab7;
+}
+
+    .btn-primary:hover {
+        background-color: #286090;
+        border-color: #204d74;
+    }
+
+/* Error message styling */
+.error-message {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    border-radius: 5px;
+}
+
+/* Custom container styling */
+.container {
+    margin-top: 20px;
+}
+
+/* Custom checkbox styling */
+.form-check-input {
+    margin-right: 5px;
+}
+
+.form-check-inline {
+    margin-right: 10px;
+}
+
+/* Layout styles */
+.layoutMiddleLayerAllVehicles {
+    padding: 20px;
+}
+
+.contentHolder {
+    padding: 20px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* Range input styling */
+.form-control-range {
+    width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+    .form-group {
+        text-align: center;
+    }
+
+        .form-group.col-md-6 {
+            margin-bottom: 15px;
+        }
+}
+
+/*.top{
+    display: flex;
+    justify-content:space-between;
+}
+.top div{
+    margin: 10px;
+}
+.bottom {
+    display: flex;
+    justify-content: space-between;
+}
+.bottom div {
+    margin: 10px;
+}*/

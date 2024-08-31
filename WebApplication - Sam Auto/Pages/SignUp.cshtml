@@ -1,0 +1,87 @@
+﻿@page
+@model WebApplication___Sam_Auto.Pages.SignUpModel
+@{
+    ViewData["Title"] = "SignUp";
+}
+
+<form method="post" class="layoutMiddleLayerSignUp" novalidate>
+    <div class="headingHolder">
+        <h2>Sign Up</h2>
+    </div>
+    <div class="formHolder">
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="error-message">
+                <span class="text-danger">@TempData["ErrorMessage"]</span>
+            </div>
+        }
+        <div>
+            <h2 class="name">First Name:</h2>
+            <span asp-validation-for="SignUpDTO.FirstName" class="text-danger"></span>
+            <input asp-for="SignUpDTO.FirstName" class="input" type="text" placeholder="Input your first name" />
+        </div>
+        <div>
+            <h2 class="name">Last Name:</h2>
+            <span asp-validation-for="SignUpDTO.LastName" class="text-danger"></span>
+            <input asp-for="SignUpDTO.LastName" class="input" type="text" placeholder="Input last name" />
+        </div>
+        <div>
+            <h2 class="name">Email:</h2>
+            <span asp-validation-for="SignUpDTO.Email" class="text-danger"></span>
+            <input asp-for="SignUpDTO.Email" class="input" type="text" placeholder="Input email" />
+        </div>
+        <div>
+            <h2 class="name">Phone:</h2>
+            <span asp-validation-for="SignUpDTO.PhoneNumber" class="text-danger"></span>
+            <input asp-for="SignUpDTO.PhoneNumber" class="input" type="tel" placeholder="Input Phone" />
+        </div>
+        <div>
+            <h2 class="name">Secret Question:</h2>
+            <span asp-validation-for="SignUpDTO.SecretQuestion" class="text-danger"></span>
+           <select asp-for="SignUpDTO.SecretQuestion" class="input" placeholder="Select a secret question">
+                 <option value="">Select a secret question</option>
+                 @foreach (var question in Model.GetSecretQuestions())
+                {
+                    <option value="@question">@question</option>
+                }
+            </select>
+        </div>
+        <div>
+            <h2 class="name">Answer to secret question:</h2>
+            <span asp-validation-for="SignUpDTO.SecretQuestionAnswer" class="text-danger"></span>
+            <input asp-for="SignUpDTO.SecretQuestionAnswer" class="input" type="text" placeholder="Input answer" />
+        </div>
+        <div>
+            <h2 class="name">Password:</h2>
+            <span asp-validation-for="SignUpDTO.Password" class="text-danger"></span>
+            <input asp-for="SignUpDTO.Password" class="input" type="password" placeholder="Input password" />
+        </div>
+        <div>
+            <h2 class="name">Confirm Password:</h2>
+            <span asp-validation-for="SignUpDTO.ConfirmPassword" class="text-danger"></span>
+            <input asp-for="SignUpDTO.ConfirmPassword" class="input" type="password" placeholder="Confirm password" />
+        </div>
+        <div class="buttonHolder">
+            <button type="submit" class="submitBtn">Sign Up</button>
+        </div>
+        <div class="AlreadyAMemberPanel">
+            <h5>Already have an account?</h5>
+            <ul class="NavToLogIn">
+                <li><a asp-area="" asp-page="/LogIn">Log In</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="image">
+        <img class="imgShadow" src="~/images/SamAutoLogo.png" alt="SamAuto Logo" />
+    </div>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/CustomSignUp.css" asp-append-version="true" />
+}
+

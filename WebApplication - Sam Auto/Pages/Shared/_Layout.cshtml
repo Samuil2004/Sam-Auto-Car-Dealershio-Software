@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"] - WebApplication___Sam_Auto</title>
+        <link rel="stylesheet" href="./css/CustomLayout.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/Sam_Auto___Individual_Assignment.styles.css" asp-append-version="true" />
+ 
+        @await RenderSectionAsync("Styles", required: false)
+         <script type="module" src="~/js/Main.js" asp-append-version="true"></script>
+     </head>
+
+    <body>
+        <header class="layoutHeader">
+            <div class="headerAndLogo"><h1 class="header">Sam Auto</h1></div>
+            <nav class="navigationBar">
+                <input type="checkbox" id="checkbox_toggle" />
+                <label for="checkbox_toggle" class="hamburger">&#9776;</label>
+                <ul class="menu">
+                    <li><a asp-area="" asp-page="/Index">Catalogue</a></li>
+                    <li><a asp-area="" asp-page="/Search">Search</a></li>
+                    <li><a asp-area="" asp-page="/MyGarage">My Garage</a></li>
+                    <li><a asp-area="" asp-page="/UserProfile">My Profile</a></li>
+                    <li><a asp-area="" asp-page="/Contact">About Us</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    
+        <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <p><strong>ADDRESS:</strong></p>
+                    <p>BULGARIA, SOFIA 1618,</p>
+                    <p>Okolovrastno Shose</p>
+                    <p>TEL.: +359 / 2 8787863; +359 / 2 2536488</p>
+                    <p>GSM: +359 / 888-987898; +359 / 886-457629</p>
+                </div>
+                <div class="col-md-4">
+                    <p><strong>WORKING HOURS:</strong></p>
+                    <p>MONDAY-FRIDAY 09:00A.M. - 06:30P.M.</p>
+                    <p>SATURDAY/SUNDAY: 10:30A.M. - 06:00P.M.</p>
+                </div>
+                <div class="col-md-4">
+                    <p><strong>INFORMATION FOR AVAILABLE EQUIPMENT AND VEHICLES:</strong></p>
+                    <p>GSM: +359 / 888-129837</p>
+                    <p>GSM: +359 / 886-917463</p>
+                    <p>GSM: +359 / 885-738575</p>
+                    <p>E-MAIL: <a href="mailto:SAM@AUTO.COM>">SAM@AUTO.COM</a></p>
+                </div>
+            </div>
+        </div>
+        </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+        @await RenderSectionAsync("Scripts", required: false)
+
+    </body>
+</html>
+

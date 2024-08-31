@@ -1,0 +1,178 @@
+﻿ @page
+@model WebApplication___Sam_Auto.Pages.MyGarageModel
+@{
+    ViewData["Title"] = "MyGarage";
+}
+
+
+<div class="layoutMiddleLayerAllVehicles">
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="error-message">
+            <span class="text-danger">@TempData["ErrorMessage"]</span>
+        </div>
+    }
+    else
+    {
+        <div class="contentHolder">
+            <div>
+                <h2 class="name whiteColor">Filter:</h2>
+                <form method="get" asp-page-handler="Filter">
+                    <select class="input" name="FilterOption">
+                        <option value="bookmarked" selected="@(Model.FilterOption == "bookmarked")">Bookmarked</option>
+                        <option value="saved" selected="@(Model.FilterOption == "saved")">Saved</option>
+                    </select>
+                    <button type="submit">Filter</button>
+                </form>
+            </div>
+             @if (Model.listToUse != null)
+            { 
+                @foreach (var vehicle in Model.listToUse)
+                {
+                    <div class="car">
+                        <div class="topLayer">
+                            <h4 class="releaseDate">@vehicle.GetPublicationDate.ToString("dd/MM/yyyy")</h4>
+                            @if (!@vehicle.GetIsReserved)
+                            {
+                                @if (!Model.IsVehicleAlreadyBookmarked(vehicle))
+                                {
+                                    <form method="post" asp-page-handler="BookmarkVehicle">
+                                        <input type="hidden" name="CurrentPage" value="@Model.CurrentPage" />
+                                        <input type="hidden" name="FilterOption" value="@Model.FilterOption" />
+                                        <input type="hidden" name="vehicleId" value="@vehicle.GetVehicleId" />
+                                        <button type="submit" class="bookmarkHeart">Bookmark</button>
+                                    </form>
+                                }
+                                @if (Model.IsVehicleAlreadyBookmarked(vehicle))
+                                {
+                                    <form method="post" asp-page-handler="UnBookmarkVehicle">
+                                        <input type="hidden" name="CurrentPage" value="@Model.CurrentPage" />
+                                        <input type="hidden" name="FilterOption" value="@Model.FilterOption" />
+                                        <input type="hidden" name="vehicleId" value="@vehicle.GetVehicleId" />
+                                        <button type="submit" class="bookmarkHeart">Unbookmark</button>
+                                    </form>
+                                }
+                            }
+                        </div>
+                        <div class="leftLayer">
+                            @if (Model.IsImageUrlAccessible(@vehicle.GetImage))
+                            {
+                                <img class="carImage" src="@vehicle.GetImage" />
+                            }
+                            else
+                            {
+                                <img class="carImage" src="~/images/DefaultErrorImage.png" />
+                            }
+                        </div>
+                        <div class="rightLayer">
+                            <div class="header">
+                                <h3 class="brandModel">@vehicle.GetBrand - @vehicle.GetModel</h3>
+                                <h3 class="price">@vehicle.GetPrice.ToString("#,##0.00")€</h3>
+                            </div>
+                            <div class="characteristicsCategory">
+                                <div><h4>Type</h4></div>
+                                <div><h4>Year of prodution</h4></div>
+                                <div><h4>Rating</h4></div>
+                                <div><h4>Color</h4></div>
+                            </div>
+                            <div class="characteristicsVehicle">
+                                <div><h4>@vehicle.GetBodyType</h4></div>
+                                <div><h4>@vehicle.GetYearOfProduction.ToString("dd/MM/yyyy")</h4></div>
+                                <div><h4>⭐@vehicle.GetAverageRating/5</h4></div>
+                                <div><h4>@vehicle.GetColor</h4></div>
+                            </div>
+                            <div class="carFooter">
+                                <a asp-page="/CarView" asp-route-id="@vehicle.GetVehicleId">Show more</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (Model.numOfPages > 1)
+                {
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                                <a class="page-link" asp-page="/MyGarage" asp-route-CurrentPage="@(Model.CurrentPage - 1)" asp-route-FilterOption="@Model.FilterOption" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            @if (Model.numOfPages <= 5)
+                            {
+                                for (int i = 1; i <= Model.numOfPages; i++)
+                                {
+                                    <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                        <a class="page-link" asp-page="/MyGarage" asp-route-CurrentPage="@i" asp-route-FilterOption="@Model.FilterOption">@i</a>
+                                    </li>
+                                }
+                            }
+                            else
+                            {
+                                if (Model.CurrentPage <= 3)
+                                {
+                                    for (int i = 1; i <= 5; i++)
+                                    {
+                                        <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                            <a class="page-link" asp-page="/MyGarage" asp-route-CurrentPage="@i" asp-route-FilterOption="@Model.FilterOption">@i</a>
+                                        </li>
+                                    }
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                    <li class="page-item">
+                                        <a class="page-link" asp-page="/MyGarage" asp-route-CurrentPage="@Model.numOfPages" asp-route-FilterOption="@Model.FilterOption">@(Model.numOfPages)</a>
+                                    </li>
+                                }
+                                else if (Model.CurrentPage >= Model.numOfPages - 2)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" asp-page="/MyGarage" asp-route-CurrentPage="1" asp-route-FilterOption="@Model.FilterOption">1</a>
+                                    </li>
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                    for (int i = Model.numOfPages - 4; i <= Model.numOfPages; i++)
+                                    {
+                                        <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                            <a class="page-link" asp-page="/MyGarage" asp-route-CurrentPage="@i" asp-route-FilterOption="@Model.FilterOption">@i</a>
+                                        </li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" asp-page="/MyGarage" asp-route-CurrentPage="1" asp-route-FilterOption="@Model.FilterOption">1</a>
+                                    </li>
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                    for (int i = Model.CurrentPage - 1; i <= Model.CurrentPage + 1; i++)
+                                    {
+                                        <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                            <a class="page-link" asp-page="/MyGarage" asp-route-CurrentPage="@i" asp-route-FilterOption="@Model.FilterOption">@i</a>
+                                        </li>
+                                    }
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                    <li class="page-item">
+                                        <a class="page-link" asp-page="/MyGarage" asp-route-CurrentPage="@Model.numOfPages" asp-route-FilterOption="@Model.FilterOption">@(Model.numOfPages)</a>
+                                </li>
+                                }
+                            }
+                            <li class="page-item @(Model.CurrentPage == Model.numOfPages ? "disabled" : "")">
+                                <a class="page-link" asp-page="/MyGarage" asp-route-CurrentPage="@(Model.CurrentPage + 1)" asp-route-FilterOption="@Model.FilterOption" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                }
+            }
+            else
+            {
+                <div class="error-message">
+                    <span class="text-danger">No vehicles have been bookmarked</span>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/CustomCatalogue.css" asp-append-version="true" />
+}
+ 

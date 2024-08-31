@@ -1,0 +1,224 @@
+﻿@page
+@model WebApplication___Sam_Auto.Pages.SearchModel
+@{
+    ViewData["Title"] = "Search";
+}
+
+<div class="layoutMiddleLayerAllVehicles">
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="error-message">
+            <span class="text-danger">@TempData["ErrorMessage"]</span>
+        </div>
+    }
+    else
+    {
+        <div class="contentHolder">
+            <div class="container mt-5">
+                <div class="card">
+                    <div class="card-body">
+                        <form method="post" asp-page-handler="Search">
+                            <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="category">Main category</label>
+                                        <div class="input-group">
+                                        <select id="category" name="category" class="form-control">
+                                                <option value="">All</option>
+                                                <option value="car" selected="@(Model.Category == "car")">Car</option>
+                                                <option value="truck" selected="@(Model.Category == "truck")">Truck</option>
+                                            <option value="motorcycle" selected="@(Model.Category == "motorcycle")">Motorcycle</option>
+                                        </select> 
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="year">Year of Production</label>
+                                        <select id="year" name="year" class="form-control">
+                                        <option value="">All</option>
+                                        @for (int year = 2001; year <= DateTime.Now.Year; year++)
+                                        {
+                                                <option value="@year" selected="@(Convert.ToInt16(Model.year) == year)">@year</option>
+                                        }
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="engine">Engine</label>
+                                        <select id="engine" name="engine" class="form-control">
+                                            <option value="">All</option>
+                                            @foreach(string engine in Model.GetEngineTypes())
+                                            {
+                                                <option value="@engine" selected="@(Model.engine == engine)">@engine</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="max-price">Max price</label>
+                                        <input type="range" id="max-price" name="maxPrice" class="form-control-range" min="0" max="500000" step="1000" value="@Model.maxPrice">
+                                    <label for="max-price" id="price-label">€ 100000</label>
+                                    </div>
+                                <div class="form-group col-md-12 text-center">
+                                    <button type="submit" class="btn btn-primary btn-lg" onclick="submitSearchForm()">S E A R C H</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.listToUse != null)
+            {
+                @foreach (var vehicle in Model.listToUse)
+                {
+                    <div class="car">
+                        <div class="topLayer">
+                            <h4 class="releaseDate">@vehicle.GetPublicationDate.ToString("dd/MM/yyyy")</h4>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                @if (!Model.IsVehicleAlreadyBookmarked(vehicle))
+                                {
+                                    <form method="post" asp-page-handler="BookmarkVehicle">
+                                        <input type="hidden" name="CurrentPage" value="@Model.CurrentPage" />
+                                        <input type="hidden" name="category" value="@Model.Category" />
+                                        <input type="hidden" name="year" value="@Model.year" />
+                                        <input type="hidden" name="engine" value="@Model.engine" />
+                                        <input type="hidden" name="maxPrice" value="@Model.maxPrice" />
+                                        <input type="hidden" name="vehicleId" value="@vehicle.GetVehicleId" />
+                                        <button type="submit" class="bookmarkHeart">Bookmark</button>
+                                    </form>
+                                }
+                                @if (Model.IsVehicleAlreadyBookmarked(vehicle))
+                                {
+                                    <form method="post" asp-page-handler="UnBookmarkVehicle">
+                                        <input type="hidden" name="CurrentPage" value="@Model.CurrentPage" />
+                                        <input type="hidden" name="category" value="@Model.Category" />
+                                        <input type="hidden" name="year" value="@Model.year" />
+                                        <input type="hidden" name="engine" value="@Model.engine" />
+                                        <input type="hidden" name="maxPrice" value="@Model.maxPrice" />                                        
+                                        <input type="hidden" name="vehicleId" value="@vehicle.GetVehicleId" />
+                                        <button type="submit" class="bookmarkHeart">Unbookmark</button>
+                                    </form>
+                                }
+                            }
+                        </div>
+                        <div class="leftLayer">
+                            @if (Model.IsImageUrlAccessible(@vehicle.GetImage))
+                            {
+                                <img class="carImage" src="@vehicle.GetImage" />
+                            }
+                            else
+                            {
+                                <img class="carImage" src="~/images/DefaultErrorImage.png" />
+                            }
+                        </div>
+                        <div class="rightLayer">
+                            <div class="header">
+                                <h3 class="brandModel">@vehicle.GetBrand - @vehicle.GetModel</h3>
+                                <h3 class="price">@vehicle.GetPrice.ToString("#,##0.00")€</h3>
+                            </div>
+                            <div class="characteristicsCategory">
+                                <div><h4>Type</h4></div>
+                                <div><h4>Year of prodution</h4></div>
+                                <div><h4>Rating</h4></div>
+                                <div><h4>Color</h4></div>
+                            </div>
+                            <div class="characteristicsVehicle">
+                                <div><h4>@vehicle.GetBodyType</h4></div>
+                                <div><h4>@vehicle.GetYearOfProduction.ToString("dd/MM/yyyy")</h4></div>
+                                <div><h4>⭐@vehicle.GetAverageRating/5</h4></div>
+                                <div><h4>@vehicle.GetColor</h4></div>
+                            </div>
+                            <div class="carFooter">
+                                <a asp-page="/CarView" asp-route-id="@vehicle.GetVehicleId">Show more</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            @if (Model.numOfPages > 1)
+            {
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                            <a class="page-link" asp-page="/Search" asp-route-category="@Model.Category" asp-route-year="@Model.year" asp-route-engine="@Model.engine" asp-route-maxPrice="@Model.maxPrice" asp-route-CurrentPage="@(Model.CurrentPage - 1)" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        @if (Model.numOfPages <= 5)
+                        {
+                            for (int i = 1; i <= Model.numOfPages; i++)
+                            {
+                                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                    <a class="page-link" asp-page="/Search" asp-route-category="@Model.Category" asp-route-year="@Model.year" asp-route-engine="@Model.engine" asp-route-maxPrice="@Model.maxPrice" asp-route-CurrentPage="@i">@i</a>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            if (Model.CurrentPage <= 3)
+                            {
+                                for (int i = 1; i <= 5; i++)
+                                {
+                                    <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                        <a class="page-link" asp-page="/Search" asp-route-category="@Model.Category" asp-route-year="@Model.year" asp-route-engine="@Model.engine" asp-route-maxPrice="@Model.maxPrice" asp-route-CurrentPage="@i">@i</a>
+                                    </li>
+                                }
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                                <li class="page-item">
+                                    <a class="page-link" asp-page="/Search" asp-route-category="@Model.Category" asp-route-year="@Model.year" asp-route-engine="@Model.engine" asp-route-maxPrice="@Model.maxPrice" asp-route-CurrentPage="@Model.numOfPages">@(Model.numOfPages)</a>
+                                </li>
+                            }
+                            else if (Model.CurrentPage >= Model.numOfPages - 2)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" asp-page="/Search" asp-route-category="@Model.Category" asp-route-year="@Model.year" asp-route-engine="@Model.engine" asp-route-maxPrice="@Model.maxPrice" asp-route-CurrentPage="1">1</a>
+                                </li>
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                                for (int i = Model.numOfPages - 4; i <= Model.numOfPages; i++)
+                                {
+                                    <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                        <a class="page-link" asp-page="/Search" asp-route-category="@Model.Category" asp-route-year="@Model.year" asp-route-engine="@Model.engine" asp-route-maxPrice="@Model.maxPrice" asp-route-CurrentPage="@i">@i</a>
+                                    </li>
+                                }
+                            }
+                            else
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" asp-page="/Search" asp-route-category="@Model.Category" asp-route-year="@Model.year" asp-route-engine="@Model.engine" asp-route-maxPrice="@Model.maxPrice" asp-route-CurrentPage="1">1</a>
+                                </li>
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                                for (int i = Model.CurrentPage - 1; i <= Model.CurrentPage + 1; i++)
+                                {
+                                    <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                        <a class="page-link" asp-page="/Search" asp-route-category="@Model.Category" asp-route-year="@Model.year" asp-route-engine="@Model.engine" asp-route-maxPrice="@Model.maxPrice" asp-route-CurrentPage="@i">@i</a>
+                                    </li>
+                                }
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                                <li class="page-item">
+                                    <a class="page-link" asp-page="/Search" asp-route-category="@Model.Category" asp-route-year="@Model.year" asp-route-engine="@Model.engine" asp-route-maxPrice="@Model.maxPrice" asp-route-CurrentPage="@Model.numOfPages">@(Model.numOfPages)</a>
+                            </li>
+                        }
+                    }
+                    <li class="page-item @(Model.CurrentPage == Model.numOfPages ? "disabled" : "")">
+                        <a class="page-link" asp-page="/Search" asp-route-category="@Model.Category" asp-route-year="@Model.year" asp-route-engine="@Model.engine" asp-route-maxPrice="@Model.maxPrice" asp-route-CurrentPage="@(Model.CurrentPage + 1)" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        }
+        
+        </div>
+    }
+</div>
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/CustomCatalogue.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/CustomSearch.css" asp-append-version="true" />
+}
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="~/js/CustomSearch.js"></script>
+} 

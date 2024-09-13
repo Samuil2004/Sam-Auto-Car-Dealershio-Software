@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer
 {
+    /// <summary>
+    /// A class responsible for communicating with the database only about all data needed for the implemented statistics
+    /// </summary>
     public class StatisticsDataAccessLayer : IStatisticsInterfaceDataAccessLayer
     {
         private readonly DataBaseConnection _databaseConnection;

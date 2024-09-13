@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer
 {
+    /// <summary>
+    /// A class responsible for communicating with the database only about all the recommendation algorithm needed data
+    /// </summary>
     public class SuggestionsDataManagerDataAccessLayer : ISuggestionsInterfaceDataAccessLayer
     {
         private readonly DataBaseConnection _databaseConnection;

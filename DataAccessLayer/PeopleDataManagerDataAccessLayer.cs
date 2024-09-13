@@ -17,6 +17,9 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer
 {
+    /// <summary>
+    /// A class responsible for communicating with the database only about all people related data
+    /// </summary>
     public class PeopleDataManagerDataAccessLayer : IPeopleInterfaceDataManagerDataAccessLayer
     {
         private readonly DataBaseConnection _databaseConnection;

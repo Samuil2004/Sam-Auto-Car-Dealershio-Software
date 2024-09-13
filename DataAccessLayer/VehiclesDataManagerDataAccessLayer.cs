@@ -22,6 +22,9 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace DataAccessLayer
 {
+    /// <summary>
+    /// A class responsible for communicating with the database only about all vehicles related data
+    /// </summary>
     public class VehiclesDataManagerDataAccessLayer : IVehicleInterfaceDataAccessLayer
     {
         private readonly DataBaseConnection _databaseConnection;

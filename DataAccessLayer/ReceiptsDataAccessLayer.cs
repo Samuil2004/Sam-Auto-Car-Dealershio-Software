@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer
 {
+    /// <summary>
+    /// A class responsible for communicating with the database only about all purchases related data (Receipts)
+    /// </summary>
     public class ReceiptsDataAccessLayer : IReceiptsInterfaceDataAccessLayer
     {
         private readonly DataBaseConnection _databaseConnection;

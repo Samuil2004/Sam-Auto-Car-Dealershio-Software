@@ -8,6 +8,9 @@ using Logic_layer;
 using Microsoft.Data.SqlClient;
 namespace DataAccessLayer.InterfacesDAL
 {
+    /// <summary>
+    /// An interface used for Dependency Inversion
+    /// </summary>
     public interface IVehicleInterfaceDataAccessLayer
     {
         void CreateVehicle(Vehicle vehicle);

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.InterfacesDAL
 {
+    /// <summary>
+    /// An interface used for Dependency Inversion
+    /// </summary>
     public interface ISuggestionsInterfaceDataAccessLayer
     {
         Dictionary<int, int> CalculateCommonBookmarks(int personId);

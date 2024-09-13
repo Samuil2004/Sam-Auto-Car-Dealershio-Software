@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.InterfacesDAL
 {
+    /// <summary>
+    /// An interface used for Dependency Inversion
+    /// </summary>
     public interface IReceiptsInterfaceDataAccessLayer
     {
         List<Receipt> ReadSoldVehiclesForSelectedPage(int pageNum, string filteringCriteria);

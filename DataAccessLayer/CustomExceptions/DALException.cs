@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.CustomExceptions
 {
+    /// <summary>
+    /// A custom exception thrown every time an issue occurs within the Data Access Layer
+    /// </summary>
     public class DALException : Exception
     {
         public DALException()

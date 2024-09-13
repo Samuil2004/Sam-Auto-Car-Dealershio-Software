@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Logic_layer.Enumerations
 {
+    /// <summary>
+    /// Enumeration for the Steering wheel type of the vehicles
+    /// </summary>
     public enum SteeringWheelType
     {
         Left_Hand,

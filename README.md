@@ -23,11 +23,11 @@ This project is a **full-stack car dealership management software** designed to 
 ### Technical Details
 
 - **Scalability**: The system's database is populated with over a thousand vehicle records, showcasing the software's ability to handle large datasets without performance degradation.
-- **Security**: All sensitive data is securely stored and managed using a specialized hash encrypting algorithm, ensuring data integrity and security.
+- **Security**: All sensitive data is securely stored and managed using a specialized hash `encrypting algorithm`, ensuring data integrity and security.
 - **Search and Filter**: Both the desktop application and the website feature robust search and filtering capabilities, allowing users to quickly find vehicles or relevant data.
-- **Recommendation Algorithm**: A custom recommendation algorithm suggests vehicles to logged-in customers based on their favorited items, enhancing the user experience.
+- **Recommendation Algorithm**: A custom `recommendation algorithm` suggests vehicles to logged-in customers based on their favorited items, enhancing the user experience.
 - **Design Patterns**: The software implements the `Strategy Pattern`, enabling flexible and maintainable code by allowing dynamic behavior changes at runtime.
-- **OOP & SOLID Principles**: The software is developed following Object-Oriented Programming (OOP) concepts and adheres to all SOLID principles, ensuring maintainable, scalable, and robust code.
+- **OOP & SOLID Principles**: The software is developed following `Object-Oriented Programming (OOP)` concepts and adheres to all `SOLID principles`, ensuring maintainable, scalable, and robust code.
 
 ### Documentation & Diagrams
 

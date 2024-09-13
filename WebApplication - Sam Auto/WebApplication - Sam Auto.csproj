@@ -19,7 +19,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Classes\Classes.csproj" />
     <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj" />
-    <ProjectReference Include="..\Logic layer\Classes.csproj" />
     <ProjectReference Include="..\LogicLayer\LogicLayer.csproj" />
   </ItemGroup>
 

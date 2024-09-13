@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Logic_layer
 {
+    /// <summary>
+    /// This is a factory pattern class that holds all possible strategies from the design pattern for payments
+    /// </summary>
     public class FactoryReceipt
     {
         public Receipt CreateReceiptBank(Vehicle selectedVehicle, DateTime sellingDate, decimal sellingPrice)

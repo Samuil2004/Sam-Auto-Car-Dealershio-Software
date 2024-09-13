@@ -2,6 +2,9 @@
 using Microsoft.Data.SqlClient;
 namespace LogicLayer.InterfacesLL
 {
+    /// <summary>
+    /// An interface used for Dependency Inversion
+    /// </summary>
     public interface IPeopleInterfaceLogicLayer
     {
         bool IsEmailAvailable(string email);
@@ -12,8 +15,6 @@ namespace LogicLayer.InterfacesLL
         void DeletePerson(int person_id);
         Person FindPerson(string Identifier, List<Person> givenList);
         void PromoteCustomer(int person_id);
-        //List<Vehicle> GetCustomerBookmarkedVehicles(int personId);
-        //List<Vehicle> GetCustomerSavedVehicles(int person_id);
         void BookmarkVehicle(int person_id, int vehicle_id);
         void UnBookmarkVehicle(int person_id, int vehicle_id);
         Person? GetUserByUsername(string givenEmail);

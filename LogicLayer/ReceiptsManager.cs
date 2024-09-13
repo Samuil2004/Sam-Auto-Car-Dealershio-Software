@@ -11,13 +11,28 @@ using System.Threading.Tasks;
 
 namespace LogicLayer
 {
+    /// <summary>
+    /// Manages operations related to vehicle receipts, including retrieving sold vehicle details, selling vehicles, and managing page-based listings of sold vehicles.
+    /// </summary>
     public class ReceiptsManager : IReceiptsInterfaceLogicLayer
     {
         private readonly IReceiptsInterfaceDataAccessLayer _receiptDataManager;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReceiptsManager"/> class.
+        /// </summary>
         public ReceiptsManager(IReceiptsInterfaceDataAccessLayer receiptDataManager)
         {
             _receiptDataManager = receiptDataManager;
         }
+
+        /// <summary>
+        /// Retrieves a list of sold vehicles for a specific page, filtered by criteria.
+        /// </summary>
+        /// <param name="pageNum">The page number to retrieve.</param>
+        /// <param name="filteringCriteria">The criteria to filter by.</param>
+        /// <returns>A list of <see cref="Receipt"/> objects for the selected page.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the page number is invalid (less than 0).</exception>
         public List<Receipt> GetSoldVehiclesForSelectedPage(int pageNum, string filteringCriteria)
         {
             if (pageNum < 0)
@@ -26,6 +41,13 @@ namespace LogicLayer
             }
             return _receiptDataManager.ReadSoldVehiclesForSelectedPage(pageNum, filteringCriteria);
         }
+
+        /// <summary>
+        /// Retrieves details of a sold vehicle by its ID.
+        /// </summary>
+        /// <param name="vehicle_id">The ID of the vehicle.</param>
+        /// <returns>A dictionary with the details of the sold vehicle, including date and description.</returns>
+        /// <exception cref="VehicleNotFound">Thrown if the vehicle ID is invalid (less than 0).</exception>
         public Dictionary<DateTime, string> GetSoldVehicleDetails(int vehicle_id)
         {
             if (vehicle_id < 0)
@@ -34,6 +56,14 @@ namespace LogicLayer
             }
             return _receiptDataManager.GetSoldVehicleDetails(vehicle_id);
         }
+
+
+        /// <summary>
+        /// Retrieves details of a sold vehicle by its ID.
+        /// </summary>
+        /// <param name="vehicle_id">The ID of the vehicle.</param>
+        /// <returns>A dictionary with the details of the sold vehicle, including date and description.</returns>
+        /// <exception cref="VehicleNotFound">Thrown if the vehicle ID is invalid (less than 0).</exception>
         public void SellVehicle(Receipt receipt, Person buyer, decimal price)
         {
             if (receipt == null || buyer == null || price < 0)

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace LogicLayer.InterfacesLL
 {
+    /// <summary>
+    /// An interface used for Dependency Inversion
+    /// </summary>
     public interface ISuggestionsInterfaceLogicLayer
     {
         List<Vehicle> GetSuggestionsForPerson(int personId, int pageNum); 

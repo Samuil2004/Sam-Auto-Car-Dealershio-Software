@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace LogicLayer.InterfacesLL
 {
+    /// <summary>
+    /// An interface used for Dependency Inversion
+    /// </summary>
     public interface IStatisticsInterfaceLogicLayer
     {
         Dictionary<int, decimal> GetMontlyRevenue(DateTime currentYear);

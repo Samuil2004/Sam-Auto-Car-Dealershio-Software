@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace LogicLayer.Models
 {
+    /// <summary>
+    /// DTO model used for updating user account password
+    /// </summary>
     public class ForgotPasswordDTOLL
     {
         [Required(ErrorMessage = "Email is required")]

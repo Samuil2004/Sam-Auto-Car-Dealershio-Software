@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace LogicLayer.Models
 {
+    /// <summary>
+    /// DTO model used for updating user's account
+    /// </summary>
     public class AccountUpdateDTOLL
     {
         [Required(ErrorMessage = "First name is required")]

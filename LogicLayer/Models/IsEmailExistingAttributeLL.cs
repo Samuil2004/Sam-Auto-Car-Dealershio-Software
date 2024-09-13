@@ -9,6 +9,9 @@ using LogicLayer.InterfacesLL;
 
 namespace LogicLayer.Models
 {
+    /// <summary>
+    /// A class used by some of the DTO models to check if a given email already exists in the database
+    /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class IsEmailExistingAttributeLL : ValidationAttribute
     {

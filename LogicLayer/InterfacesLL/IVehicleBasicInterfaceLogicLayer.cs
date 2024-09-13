@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace LogicLayer.InterfacesLL
 {
+    /// <summary>
+    /// An interface used for Dependency Inversion
+    /// </summary>
     public interface IVehicleBasicInterfaceLogicLayer
     {
         Vehicle FindVehicle(string selectedString, List<Vehicle> givenList);

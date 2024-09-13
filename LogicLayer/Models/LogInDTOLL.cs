@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace LogicLayer.Models
 {
+    /// <summary>
+    /// A DTO model used when user logs in in both Desktop and Web applications
+    /// </summary>
     public class LogInDTOLL
     {
         [Required(ErrorMessage = "Email is required")]

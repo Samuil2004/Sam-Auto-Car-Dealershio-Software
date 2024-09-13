@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace LogicLayer.Models
 {
+    /// <summary>
+    /// A validation class for a real pattern matching email
+    /// </summary>
     public class EmailLTDCheckerAttribute : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)

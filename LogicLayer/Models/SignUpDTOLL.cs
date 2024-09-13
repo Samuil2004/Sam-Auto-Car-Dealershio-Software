@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace LogicLayer.Models
 {
+    /// <summary>
+    /// A DTO model used when user sign up
+    /// </summary>
     public class SignUpDTOLL
     {
         [Required(ErrorMessage = "First name is required")]

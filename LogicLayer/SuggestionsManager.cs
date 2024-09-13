@@ -11,21 +11,39 @@ using System.Threading.Tasks;
 
 namespace LogicLayer
 {
+
+    /// <summary>
+    /// Manages vehicle suggestions for users based on their preferences and bookmarks.
+    /// </summary>
     public class SuggestionsManager : ISuggestionsInterfaceLogicLayer
     {
         private readonly ISuggestionsInterfaceDataAccessLayer _suggestionnsDataManager;
-        private readonly IVehicleBasicInterfaceLogicLayer _vehicleManager; 
+        private readonly IVehicleBasicInterfaceLogicLayer _vehicleManager;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SuggestionsManager"/> class.
+        /// </summary>
         public SuggestionsManager(IVehicleBasicInterfaceLogicLayer vehicleManager,ISuggestionsInterfaceDataAccessLayer suggestionsManager)
         {
             _vehicleManager = vehicleManager;
             _suggestionnsDataManager = suggestionsManager;
         }
+
+        /// <summary>
+        /// Retrieves a list of vehicle suggestions for a specific person and page number.
+        /// </summary>
+        /// <param name="personId">The ID of the person for whom to get vehicle suggestions.</param>
+        /// <param name="pageNum">The page number for the suggestions.</param>
+        /// <returns>A list of recommended vehicles.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the page number is less than 1.</exception>
         public List<Vehicle> GetSuggestionsForPerson(int personId, int pageNum)
         { 
             if (pageNum < 1)
             {
                 throw new ArgumentOutOfRangeException("This page number does not exist! Please select an already existing page number from the given ones in the navigation bar!");
             }
+
+            // If no personId is provided or the person has no bookmarks, return a default list of available vehicles.
             if (personId < 1)
             {
                 return _vehicleManager.ReadAvailableVehiclesForSelectedPage(pageNum, null, true).Take(10).ToList();
@@ -44,6 +62,8 @@ namespace LogicLayer
             int startIndex = (pageNum - 1) * 10;
             int endIndex = pageNum * 10;
 
+
+            // Fetch and filter vehicles based on common bookmarks with other users.
             foreach (var bookmark in CalculateCommonBookrmarksWithOtherUsers)
             {
                 List<int> distinctVehicleFetched = _suggestionnsDataManager.GetDistinctVehiclesFromOtherUsers(personId, bookmark.Key);
@@ -74,12 +94,15 @@ namespace LogicLayer
                 }
             }
 
+            // Retrieve the recommended vehicles from the list of IDs.
             List<Vehicle> listOfReccomendedVehicles = new List<Vehicle>();
             foreach(int id in suggestedVehiclesIds.Take(10))
             {
                 listOfReccomendedVehicles.Add(_vehicleManager.ReadVehicle(id));
             }
-            if(listOfReccomendedVehicles.Count() < 10)
+
+            // If fewer than 10 vehicles are recommended, add additional available vehicles that are not part of the already recommended vehicles.
+            if (listOfReccomendedVehicles.Count() < 10)
             {
                 do
                 {

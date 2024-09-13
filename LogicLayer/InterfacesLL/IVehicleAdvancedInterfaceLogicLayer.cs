@@ -3,6 +3,9 @@ using Logic_layer;
 
 namespace LogicLayer.InterfacesLL
 {
+    /// <summary>
+    /// An interface used for Dependency Inversion
+    /// </summary>
     public interface IVehicleAdvancedInterfaceLogicLayer
     {
         void CreateVehicle(Vehicle vehicle);

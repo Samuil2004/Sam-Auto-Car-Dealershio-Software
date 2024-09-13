@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace LogicLayer.Models
 {
+    /// <summary>
+    /// A DTO for setting password. The given password must match certain condition for security reasons
+    /// </summary>
     public class ResetPasswordDTO
     {
         [Required(ErrorMessage = "Password is required")]

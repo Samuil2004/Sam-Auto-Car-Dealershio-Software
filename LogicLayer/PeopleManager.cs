@@ -13,16 +13,29 @@ using LogicLayer.InterfacesLL;
 using System.Transactions;
 namespace LogicLayer
 {
+    /// <summary>
+    /// Manages operations related to people, including user authentication, creation, update, deletion, and other related functions.
+    /// </summary>
     public class PeopleManager : IPeopleInterfaceLogicLayer
     {
         private readonly IPeopleInterfaceDataManagerDataAccessLayer _peopleDataManager;
         private PasswordMaskingManager passwordMasker;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PeopleManager"/> class.
+        /// </summary>
         public PeopleManager(IPeopleInterfaceDataManagerDataAccessLayer peopleDataManager)
         {
             _peopleDataManager = peopleDataManager;
         }
 
+        /// <summary>
+        /// Checks for a user by email and password for desktop applications.
+        /// </summary>
+        /// <param name="givenEmail">The email of the user.</param>
+        /// <param name="givenPassword">The password of the user.</param>
+        /// <returns>The <see cref="Person"/> if credentials are valid; otherwise, <c>null</c>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if email or password is null or empty.</exception>
         public Person? CheckForUserDesktop(string givenEmail, string givenPassword)
         {
             if(string.IsNullOrEmpty(givenEmail) || string.IsNullOrEmpty(givenPassword)) 
@@ -49,6 +62,14 @@ namespace LogicLayer
                 return null;
             }
         }
+
+        /// <summary>
+        /// Checks for a user by email and password for web applications.
+        /// </summary>
+        /// <param name="givenEmail">The email of the user.</param>
+        /// <param name="givenPassword">The password of the user.</param>
+        /// <returns>The <see cref="Person"/> if credentials are valid; otherwise, <c>null</c>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if email or password is null or empty.</exception>
         public Person? CheckForUserWeb(string givenEmail, string givenPassword)
         {
             if (string.IsNullOrEmpty(givenEmail) || string.IsNullOrEmpty(givenPassword))
@@ -76,6 +97,15 @@ namespace LogicLayer
             }
         }
 
+        /// <summary>
+        /// Creates a new person with the specified details and password.
+        /// </summary>
+        /// <param name="p">The person to create.</param>
+        /// <param name="password">The password for the new person.</param>
+        /// <param name="secretQuestion">The secret question for password recovery.</param>
+        /// <param name="answer">The answer to the secret question.</param>
+        /// <returns>The ID of the newly created person.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if any of the parameters are null or empty.</exception>
         public int CreatePerson(Person p, string password,string secretQuestion, string answer)
         {
             if(p == null || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(secretQuestion) || string.IsNullOrEmpty(answer)) 
@@ -96,6 +126,17 @@ namespace LogicLayer
             return _peopleDataManager.CreatePerson(p, salt, hash, secretQuestionId, answer);
         }
 
+        /// <summary>
+        /// Updates an existing person's details.
+        /// </summary>
+        /// <param name="personId">The ID of the person to update.</param>
+        /// <param name="email">The new email address.</param>
+        /// <param name="phoneNumber">The new phone number.</param>
+        /// <param name="password">The new password.</param>
+        /// <param name="secretQuestion">The new secret question.</param>
+        /// <param name="answer">The new answer to the secret question.</param>
+        /// <exception cref="UserNotFound">Thrown if the person ID is invalid.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if any of the parameters are null or empty.</exception>
         public void UpdatePerson(int personId, string email,string phoneNumber, string password, string secretQuestion, string answer)
         {
             if(personId < 0)
@@ -120,6 +161,11 @@ namespace LogicLayer
             _peopleDataManager.UpdatePerson(personId,email,phoneNumber,hash,salt,secretQuestionId, answer);
         }
 
+        /// <summary>
+        /// Deletes a person by ID.
+        /// </summary>
+        /// <param name="person_id">The ID of the person to delete.</param>
+        /// <exception cref="UserNotFound">Thrown if the person ID is invalid.</exception>
         public void DeletePerson(int person_id)
         {
             if (person_id < 0)
@@ -129,6 +175,12 @@ namespace LogicLayer
             _peopleDataManager.DeletePerson(person_id);
         }
 
+        /// <summary>
+        /// Checks if an email address is available for registration.
+        /// </summary>
+        /// <param name="email">The email address to check.</param>
+        /// <returns><c>true</c> if the email is available; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the email is null or empty.</exception>
         public bool IsEmailAvailable(string email)
         {
             if(string.IsNullOrEmpty(email))
@@ -138,6 +190,14 @@ namespace LogicLayer
             return _peopleDataManager.IsEmailAvailable(email);
         }
 
+        /// <summary>
+        /// Retrieves a list of people for a specific page, filtered by role and criteria.
+        /// </summary>
+        /// <param name="role">The role to filter by.</param>
+        /// <param name="pageNum">The page number to retrieve.</param>
+        /// <param name="filteringCriteria">The criteria to filter by.</param>
+        /// <returns>A list of <see cref="Person"/> objects.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the role is null or the page number is invalid.</exception>
         public List<Person> GetPeopleForSelectedPage(string role, int pageNum, string filteringCriteria)
         {
             if(pageNum < 1 || string.IsNullOrEmpty(role))
@@ -146,6 +206,14 @@ namespace LogicLayer
             }
             return _peopleDataManager.ReadPeopleForPage(role,pageNum, filteringCriteria);
         }
+
+        /// <summary>
+        /// Finds a person in a given list by their identifier.
+        /// </summary>
+        /// <param name="Identifier">The identifier of the person to find.</param>
+        /// <param name="givenList">The list of people to search through.</param>
+        /// <returns>The <see cref="Person"/> if found; otherwise, <c>null</c>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the identifier or list is null.</exception>
         public Person FindPerson(string Identifier,List<Person> givenList)
         {
             if (string.IsNullOrEmpty(Identifier) || givenList == null)
@@ -163,6 +231,11 @@ namespace LogicLayer
         }
 
 
+        /// <summary>
+        /// Promotes a customer to a loyal customer.
+        /// </summary>
+        /// <param name="person_id">The ID of the person to promote.</param>
+        /// <exception cref="UserNotFound">Thrown if the person ID is invalid.</exception>
         public void PromoteCustomer(int person_id)
         {
             if(person_id < 1)
@@ -172,24 +245,13 @@ namespace LogicLayer
             _peopleDataManager.PromoteCustomer(person_id);
         }
 
-        //public List<Vehicle> GetCustomerBookmarkedVehicles(int personId)
-        //{
-        //    if (personId < 1)
-        //    {
-        //        throw new UserNotFound("User could not be found \nTry again!");
-        //    }
-        //    return _peopleDataManager.GetCustomerBookmarkedVehicles(personId,null);
-        //}
-
-        //public List<Vehicle> GetCustomerSavedVehicles(int personId)
-        //{
-        //    if (personId < 1)
-        //    {
-        //        throw new UserNotFound("User could not be found \nTry again!");
-        //    }
-        //    return _peopleDataManager.GetCustomerSavedVehicles(personId,null);
-        //}
-
+        /// <summary>
+        /// Bookmarks a vehicle as favourite for a user.
+        /// </summary>
+        /// <param name="person_id">The ID of the user.</param>
+        /// <param name="vehicle_id">The ID of the vehicle to bookmark.</param>
+        /// <exception cref="UserNotFound">Thrown if the person ID is invalid.</exception>
+        /// <exception cref="VehicleNotFound">Thrown if the vehicle ID is invalid.</exception>
         public void BookmarkVehicle(int person_id, int vehicle_id)
         {
             if (person_id < 1)
@@ -202,6 +264,14 @@ namespace LogicLayer
             }
             _peopleDataManager.BookmarkVehicle(person_id, vehicle_id);
         }
+
+        /// <summary>
+        /// Unbookmarks a vehicle for a user.
+        /// </summary>
+        /// <param name="person_id">The ID of the user.</param>
+        /// <param name="vehicle_id">The ID of the vehicle to unbookmark.</param>
+        /// <exception cref="UserNotFound">Thrown if the person ID is invalid.</exception>
+        /// <exception cref="VehicleNotFound">Thrown if the vehicle ID is invalid.</exception>
         public void UnBookmarkVehicle(int person_id, int vehicle_id)
         {
             if (person_id < 1)
@@ -215,6 +285,13 @@ namespace LogicLayer
             _peopleDataManager.UnBookmarkVehicle(person_id, vehicle_id);
         }
 
+
+        /// <summary>
+        /// Retrieves a user by their email address (username).
+        /// </summary>
+        /// <param name="givenEmail">The email of the user.</param>
+        /// <returns>The <see cref="Person"/> associated with the given email, if found; otherwise, <c>null</c>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the email is null or empty.</exception>
         public Person? GetUserByUsername(string givenEmail)
         {
             if(string.IsNullOrEmpty(givenEmail))
@@ -223,6 +300,13 @@ namespace LogicLayer
             }
             return _peopleDataManager.ReadPerson(0,givenEmail,null);
         }
+
+        /// <summary>
+        /// Retrieves a user by their ID.
+        /// </summary>
+        /// <param name="personId">The ID of the person.</param>
+        /// <returns>The <see cref="Person"/> associated with the given ID.</returns>
+        /// <exception cref="UserNotFound">Thrown if the person ID is invalid.</exception>
         public Person GetUserById(int personId)
         {
             if (personId < 0)
@@ -231,10 +315,25 @@ namespace LogicLayer
             }
             return _peopleDataManager.ReadPerson(personId,null,null);
         }
+
+        /// <summary>
+        /// Reads the secret questions for password recovery.
+        /// </summary>
+        /// <returns>A dictionary of secret question IDs and their corresponding questions.</returns>
         public Dictionary<int, string> ReadSecretQuestions()
         {
             return _peopleDataManager.ReadSecretQuestions();
         }
+
+
+        /// <summary>
+        /// Checks a user's secret question and answer for forgotten password recovery.
+        /// </summary>
+        /// <param name="email">The email of the user.</param>
+        /// <param name="secretQuestion">The secret question to check.</param>
+        /// <param name="secretAnswer">The answer to the secret question.</param>
+        /// <returns>The <see cref="Person"/> if the secret question and answer match; otherwise, <c>null</c>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if email, secret question, or answer is null or empty.</exception>
         public Person? CheckUserSecretQuestionForForgottenPassword(string email, string secretQuestion, string secretAnswer)
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(secretQuestion) || string.IsNullOrEmpty(secretAnswer))
